@@ -36,9 +36,9 @@ class Form {
       player.updateCount(0);
       game.update(0);
       database.ref('/').update({
-        players:null
+        players:null,
+        finishedPlayers:0 
       });
     });
-
   }
 }

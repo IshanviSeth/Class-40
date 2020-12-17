@@ -39,6 +39,8 @@ class Game {
     car4.addImage("car4",car4_img);
 
     cars = [car1, car2, car3, car4];
+
+    passedFinish=false
   }
 
   play(){
@@ -46,11 +48,11 @@ class Game {
     
     Player.getPlayerInfo();
     
+    player.getFinishedPlayers() 
+
     if(allPlayers !== undefined){
       background(rgb(198,135,103));
       image(track, 0,-displayHeight*4,displayWidth, displayHeight*5);
-      
-      //var display_position = 100;
       
       //index of the array
       var index = 0;
@@ -87,19 +89,44 @@ class Game {
 
     }
 
-    if(keyIsDown(UP_ARROW) && player.index !== null){
+    if(keyIsDown(UP_ARROW) && player.index !== null && passedFinish!== true){
       player.distance +=10
       player.update();
     }
 
-    if(player.distance > 3860){
-      gameState = 2;
+    if(player.distance > 3860 && passedFinish === false){
+      Player.updateFinishedPlayers()
+      player.rank = finishedPlayers
+      player.update()
+      passedFinish = true 
     }
    
     drawSprites();
   }
 
-  end(){
-    console.log("Game Ended");
+ displayRanks(){
+    camera.position.x=0 
+    camera.position.y=0 
+    imageMode(CENTER)
+    Player.getPlayerInfo() 
+    image(bronze,displayWidth/-4,-100+displayHeight/9,200,240)
+    image(silver,displayWidth/4,-100+displayHeight/10,225,270)
+    image(gold,0,-100,250,300)
+    textAlign(CENTER)
+    textSize(50) 
+    for(var x in allPlayers){
+      if(allPlayers[x].rank===1){
+        text("First : "+allPlayers[x].name,0,85)
+      }
+      else if(allPlayers[x].rank===2){
+        text("Second : "+allPlayers[x].name,displayWidth/4,displayHeight/9+73)
+      }
+      else if(allPlayers[x].rank===3){
+        text("Third : "+allPlayers[x].name,displayWidth/-4,displayHeight/10+76)
+      }else {
+        textSize(30)
+        text("Merit of Participation to : "+allPlayers[x].name,0,225)
+      }
+    }
   }
 }
